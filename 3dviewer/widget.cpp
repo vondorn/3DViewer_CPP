@@ -2,10 +2,9 @@
 
 #include "./ui_widget.h"
 
-Widget::Widget(QWidget *parent)
-    : QOpenGLWidget(parent),
-      texture(0),
-      indexBuffer(QOpenGLBuffer::IndexBuffer) {}
+namespace s21 {
+
+Widget::Widget(Model* model) : model_(model) {}
 
 Widget::~Widget() {}
 
@@ -13,8 +12,6 @@ void Widget::initializeGL() {
   glClearColor(0.792969f, 0.613281f, 0.9375f, 1.0f);  // покраска фона rgb
   glEnable(GL_DEPTH_TEST);  // включение теста глубины
   glEnable(GL_CULL_FACE);  // не ренднерим то, что находится вне поля зрения
-
-  initShaders();
 }
 
 void Widget::resizeGL(int w, int h) {
@@ -29,34 +26,41 @@ void Widget::resizeGL(int w, int h) {
 void Widget::paintGL() {
   glClear(GL_COLOR |
           GL_DEPTH_BUFFER_BIT);  // очищение цветового и глубинного буфера
+
+  QVector<QVector3D> vert = model_->getVertexes();
+
   glLineWidth(2);
   glBegin(GL_LINES);
 
-  glColor3f(1.0f, 0.0f, 0.0f);  // Красный цвет
-  glVertex3f(-0.75f, -0.75f, 0.0f);
-  glVertex3f(0.0f, 0.0f, 0.0f);
-  glVertex3f(0.0f, 0.0f, 0.0f);
-  glVertex3f(0.75f, 0.0f, 0.0f);
+  glColor3f(0.0f, 0.0f, 1.0f);  // Синий цвет
+
+  if (!vert.size()) close();
+
+  for (int i = 0; i < vert.size() - 1; i++) {
+    glVertex3f(vert.at(i).x(), vert.at(i).y(), vert.at(i).z());
+    glVertex3f(vert.at(i + 1).x(), vert.at(i + 1).y(), vert.at(i + 1).z());
+  }
+
   glEnd();
 }
 
-void Widget::initShaders() {
-  if (!sp.addShaderFromSourceFile(
-          QOpenGLShader::Vertex,
-          ":/vshader.vsh")) {  // загрузка вершиннвх шейдеров
-    close();
-  }
+// void Widget::initShaders() {
+//   if (!sp.addShaderFromSourceFile(
+//           QOpenGLShader::Vertex,
+//           ":/vshader.vsh")) {  // загрузка вершиннвх шейдеров
+//     close();
+//   }
 
-  if (!sp.addShaderFromSourceFile(
-          QOpenGLShader::Fragment,
-          ":/fshader.fsh")) {  // загрузка фрагментных шейдеров
-    close();
-  }
+//   if (!sp.addShaderFromSourceFile(
+//           QOpenGLShader::Fragment,
+//           ":/fshader.fsh")) {  // загрузка фрагментных шейдеров
+//     close();
+//   }
 
-  if (!sp.link()) {  // связывание шейдеров в программу
-    close();
-  }
-}
+//   if (!sp.link()) {  // связывание шейдеров в программу
+//     close();
+//   }
+// }
 
 // void Widget::initCube(float w) {
 //   float v = w / 2.0f;
@@ -88,3 +92,4 @@ void Widget::initShaders() {
 //   vertexes.append(
 //       VertexData(QVector3D(v, -v, -v), QVector2D(1, 0), QVector3D(1, 0, 0)));
 // }
+}  // namespace s21

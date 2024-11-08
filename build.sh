@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd ../opengl
+cd 3dviewer
 qmake
 make
