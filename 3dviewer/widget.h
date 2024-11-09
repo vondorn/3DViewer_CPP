@@ -1,6 +1,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#include <QKeyEvent>
 #include <QMatrix4x4>
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
@@ -30,6 +31,10 @@ class Widget : public QOpenGLWidget {
 
   // void initShaders();
   // void initCube();
+
+  void on_pushButton_clicked();
+
+  void keyPressEvent(QKeyEvent* event) override;
 
  private:
   Model* model_;
