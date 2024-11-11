@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>objects/cube.obj</file>
         <file>objects/a.obj</file>
+        <file>shaders/vshader.vsh</file>
+        <file>shaders/fshader.fsh</file>
     </qresource>
 </RCC>

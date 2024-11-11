@@ -20,33 +20,30 @@ void Widget::initializeGL() {
 void Widget::resizeGL(int w, int h) {
   float aspect = w / (float)h;  // соотношение ширины к высоте для правильного
                                 // масштабирования сцены
-  // m.setToIdentity();  // делают матрицу m единичной
-  // m.perspective(45, aspect, 0.1f,
-  //               10.0f);  // создание матрицы перспектив: угол обзораº,
-  //               аспект,
-  //                        // ближний и дальний предел
+  m_pr.setToIdentity();  // делает матрицу m единичной
+  m_pr.perspective(45, aspect, 0.1f,
+                   10.0f);  // создание матрицы перспектив: угол обзораº,
+                            // аспект, ближний и дальний предел
 }
 
 void Widget::paintGL() {
-  glClear(GL_COLOR |
-          GL_DEPTH_BUFFER_BIT);  // очищение цветового и глубинного буфера
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   QVector<QVector3D> vert = model_->getVertexes();
-  QVector<facet> faces = model_->getFacets();
-  glLineWidth(2);
+  QVector<unsigned> faces = model_->getFacets();
 
-  glColor3f(0.0f, 0.0f, 1.0f);  // Синий цвет
+  if (faces.empty()) close();
 
-  // if (faces.size() != 3) close();
-
+  glLineWidth(6);
+  glColor3f(0.0f, 0.0f, 1.0f);
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, vert.data());
-  glDrawElements(GL_LINES, faces.size() * 3, GL_UNSIGNED_INT, faces.data());
+  glDrawElements(GL_TRIANGLES, faces.size(), GL_UNSIGNED_INT, faces.data());
 
-  glColor3f(0.0f, 1.0f, 0.0f);  // Зеленый цвет
-
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glPointSize(12);
   glDrawArrays(GL_POINTS, 0, vert.size());
-  glPointSize(8);
+
   glDisableClientState(GL_VERTEX_ARRAY);
 
   // for (int i = 0; i < faces.size(); i++) {
@@ -70,15 +67,20 @@ void Widget::paintGL() {
   // glEnd();
 }
 
-void Widget::on_pushButton_clicked() { model_->moveModel(); }
-
 void Widget::keyPressEvent(QKeyEvent* event) {
   switch (event->key()) {
     case Qt::Key_Space:
-      model_->moveModel();
+      setCursor(QCursor(Qt::ClosedHandCursor));
+      isSpacePressed = 1;
       break;
-    case Qt::Key_S:
-      model_->scaleModel();
+    case Qt::Key_R:
+      model_->rotateY(5);
+      break;
+    case Qt::Key_T:
+      model_->rotateX(5);
+      break;
+    case Qt::Key_Y:
+      model_->rotateZ(5);
       break;
     default:
       break;
@@ -86,52 +88,64 @@ void Widget::keyPressEvent(QKeyEvent* event) {
   update();
 }
 
+void Widget::keyReleaseEvent(QKeyEvent* event) {
+  switch (event->key()) {
+    case Qt::Key_Space:
+      unsetCursor();
+      isSpacePressed = 0;
+      break;
+    default:
+      break;
+  }
+}
+
+void Widget::mousePressEvent(QMouseEvent* event) {
+  isPressed = true;
+  lastPosition = event->pos();
+}
+
+void Widget::mouseReleaseEvent(QMouseEvent* event) { isPressed = false; }
+
+void Widget::mouseMoveEvent(QMouseEvent* event) {
+  if (isSpacePressed && isPressed) {
+    QPoint position = event->pos();
+    model_->moveModelY((lastPosition.y() - position.y()) / 500.0f);
+    model_->moveModelX((position.x() - lastPosition.x()) / 500.0f);
+    update();
+    lastPosition = position;
+  } else if (isPressed) {
+    QPoint position = event->pos();
+    model_->rotateY((position.x() - lastPosition.x()) / 4);
+    model_->rotateX((position.y() - lastPosition.y()) / 4);
+    // model_->rotateZ((position.x() - lastPosition.x()) / 50);
+
+    update();
+    lastPosition = position;
+  }
+}
+
+void Widget::wheelEvent(QWheelEvent* event) {
+  bool scaling = event->angleDelta().y() > 0 ? 1 : 0;
+  model_->scaleModel(scaling);
+  update();
+}
+
 // void Widget::initShaders() {
 //   if (!sp.addShaderFromSourceFile(
 //           QOpenGLShader::Vertex,
-//           ":/vshader.vsh")) {  // загрузка вершиннвх шейдеров
+//           ":/shaders/vshader.vsh")) {  // загрузка вершиннвх шейдеров
 //     close();
 //   }
 
-//   if (!sp.addShaderFromSourceFile(
-//           QOpenGLShader::Fragment,
-//           ":/fshader.fsh")) {  // загрузка фрагментных шейдеров
-//     close();
-//   }
+//   // if (!sp.addShaderFromSourceFile(
+//   //         QOpenGLShader::Fragment,
+//   //         ":/shaders/fshader.fsh")) {  // загрузка фрагментных шейдеров
+//   //   close();
+//   // }
 
 //   if (!sp.link()) {  // связывание шейдеров в программу
 //     close();
 //   }
 // }
 
-// void Widget::initCube(float w) {
-//   float v = w / 2.0f;
-//   QVector<VertexData> vertexes;
-//   vertexes.append(
-//       VertexData(QVector3D(-v, v, v), QVector2D(0, 1), QVector3D(0, 0, 1)));
-//   vertexes.append(
-//       VertexData(QVector3D(-v, -v, v), QVector2D(0, 0), QVector3D(0, 0, 1)));
-//   vertexes.append(
-//       VertexData(QVector3D(v, v, v), QVector2D(1, 1), QVector3D(0, 0, 1)));
-//   vertexes.append(
-//       VertexData(QVector3D(v, -v, v), QVector2D(1, 0), QVector3D(0, 0, 1)));
-
-//   vertexes.append(
-//       VertexData(QVector3D(v, v, v), QVector2D(0, 1), QVector3D(1, 0, 0)));
-//   vertexes.append(
-//       VertexData(QVector3D(v, -v, v), QVector2D(0, 0), QVector3D(1, 0, 0)));
-//   vertexes.append(
-//       VertexData(QVector3D(v, v, -v), QVector2D(1, 1), QVector3D(1, 0, 0)));
-//   vertexes.append(
-//       VertexData(QVector3D(v, -v, -v), QVector2D(1, 0), QVector3D(1, 0, 0)));
-
-//   vertexes.append(
-//       VertexData(QVector3D(v, v, v), QVector2D(0, 1), QVector3D(1, 0, 0)));
-//   vertexes.append(
-//       VertexData(QVector3D(v, -v, v), QVector2D(0, 0), QVector3D(1, 0, 0)));
-//   vertexes.append(
-//       VertexData(QVector3D(v, v, -v), QVector2D(1, 1), QVector3D(1, 0, 0)));
-//   vertexes.append(
-//       VertexData(QVector3D(v, -v, -v), QVector2D(1, 0), QVector3D(1, 0, 0)));
-// }
 }  // namespace s21

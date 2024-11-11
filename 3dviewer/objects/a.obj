@@ -1,10 +1,37 @@
 v -0.5 -0.5 0
+v -0.75 0 0
 v -0.5 0.5 0
 v 0.5 0.5 0
+v 0.75 0 0
 v 0.5 -0.5 0
 
 
-f 1/1/1 2/1/1 3/1/1
+f 1/1/1 2/2/1 3/1/1
 f 1/1/1 3/1/1 4/1/1
+f 1/1/1 4/1/1 5/1/1
+f 1/1/1 5/1/1 6/1/1
 
-1 2 2 3 3 1
+1 2 2 3 3 4 4 5 5 6 6 1
+
+while (!in.atEnd()) {
+    line = in.readLine().trimmed();
+
+    if (line.startsWith("v ")) {
+      QStringList vertex = line.split(' ', Qt::SkipEmptyParts);
+      if (vertex.size() == 4) {
+        float x = vertex[1].toFloat();
+        float y = vertex[2].toFloat();
+        float z = vertex[3].toFloat();
+        vertexes.append(QVector3D(x, y, z));
+      }
+    } else if (line.startsWith("f ")) {
+      QStringList list = line.split(' ', Qt::SkipEmptyParts);
+      if (list.size() == 4) {
+        for (short int i = 1; i < 4; i++) {
+          QStringList vertex = list[i].split('/', Qt::SkipEmptyParts);
+          facets.push_back(vertex[0].toUInt() - 1);
+          qDebug() << vertex[0].toUInt() - 1;
+        }
+      }
+    }
+  }

@@ -28,3 +28,5 @@ LIBS += -L/Users/granceti/.brew/Cellar/glew/2.2.0_1/lib -lGLEW
 
 INCLUDEPATH += -L/Users/granceti/.brew/Cellar/glew/2.2.0_1/include/GL
 DEPENDPATH += -L/Users/granceti/.brew/Cellar/glew/2.2.0_1/include/GL
+
+RESOURCES += resources.qrc  
