@@ -48,6 +48,10 @@ class Widget : public QOpenGLWidget {
   bool isPressed = 0;  // Флаг, отслеживающий состояние нажатия
   bool isSpacePressed = 0;
   QPoint lastPosition;  // Последняя известная позиция нажатия
+
+  // void resizeEvent(QResizeEvent* event) override {
+  //   resize(event->size().width(), event->size().width());
+  // }
 };
 }  // namespace s21
 #endif  // WIDGET_H

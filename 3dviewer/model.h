@@ -43,6 +43,8 @@ class Model {
  private:
   QVector<QVector3D> vertexes;
   QVector<unsigned> facets;
+
+
 };
 }  // namespace s21
 #endif  // MODEL_H

@@ -18,12 +18,20 @@ void Widget::initializeGL() {
 }
 
 void Widget::resizeGL(int w, int h) {
-  float aspect = w / (float)h;  // соотношение ширины к высоте для правильного
-                                // масштабирования сцены
-  m_pr.setToIdentity();  // делает матрицу m единичной
-  m_pr.perspective(45, aspect, 0.1f,
-                   10.0f);  // создание матрицы перспектив: угол обзораº,
-                            // аспект, ближний и дальний предел
+  // float aspect = w / (float)h;  // соотношение ширины к высоте для
+  // правильного
+  //                               // масштабирования сцены
+  // m_pr.setToIdentity();  // делает матрицу m единичной
+  // m_pr.perspective(45, aspect, 0.1f,
+  //                  10.0f);  // создание матрицы перспектив: угол обзораº,
+  // аспект, ближний и дальний предел
+
+  // glViewport(0, 0, w, h);
+  // glMatrixMode(GL_PROJECTION);
+  // glLoadIdentity();
+  // GLfloat x = (GLfloat)w / h;
+  // glFrustum(-x, x, -1.0, 1.0, -1.0, 1.0);
+  // glMatrixMode(GL_MODELVIEW);
 }
 
 void Widget::paintGL() {
@@ -42,6 +50,7 @@ void Widget::paintGL() {
 
   glColor3f(0.0f, 1.0f, 0.0f);
   glPointSize(12);
+
   glDrawArrays(GL_POINTS, 0, vert.size());
 
   glDisableClientState(GL_VERTEX_ARRAY);
@@ -115,8 +124,8 @@ void Widget::mouseMoveEvent(QMouseEvent* event) {
     lastPosition = position;
   } else if (isPressed) {
     QPoint position = event->pos();
-    model_->rotateY((position.x() - lastPosition.x()) / 4);
-    model_->rotateX((position.y() - lastPosition.y()) / 4);
+    model_->rotateY((lastPosition.x() - position.x()) / 4.0f);
+    model_->rotateX((lastPosition.y() - position.y()) / 4.0f);
     // model_->rotateZ((position.x() - lastPosition.x()) / 50);
 
     update();

@@ -98,7 +98,7 @@ void Model::moveModelY(float distance) {
 }
 
 void Model::scaleModel(bool scaling) {
-  float m = scaling ? 1.1 : 0.9;
+  float m = scaling ? 1.1f : 0.9f;
   for (int i = 0; i < vertexes.size(); i++) {
     vertexes[i].setX(vertexes[i].x() * m);
     vertexes[i].setY(vertexes[i].y() * m);
