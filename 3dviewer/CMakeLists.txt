@@ -33,7 +33,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         resources.qrc
         controller.h controller.cpp
 				mainwindow.h mainwindow.cpp
-				mainwindow.ui
+				mainwindow.h mainwindow.cpp mainwindow.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET 3dviewer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

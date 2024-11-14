@@ -15,7 +15,7 @@ INCLUDEPATH += .
 
 # Input
 HEADERS += widget.h model.h mainwindow.h
-FORMS += widget.ui
+FORMS += widget.ui mainwindow.ui
 SOURCES += main.cpp widget.cpp model.cpp mainwindow.cpp
 TRANSLATIONS += 3dviewer_en_US.ts
 

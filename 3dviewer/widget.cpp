@@ -18,29 +18,24 @@ void Widget::initializeGL() {
 }
 
 void Widget::resizeGL(int w, int h) {
-  // float aspect = w / (float)h;  // соотношение ширины к высоте для
-  // правильного
-  //                               // масштабирования сцены
-  // m_pr.setToIdentity();  // делает матрицу m единичной
-  // m_pr.perspective(45, aspect, 0.1f,
-  //                  10.0f);  // создание матрицы перспектив: угол обзораº,
-  // аспект, ближний и дальний предел
-
-  // glViewport(0, 0, w, h);
-  // glMatrixMode(GL_PROJECTION);
-  // glLoadIdentity();
-  // GLfloat x = (GLfloat)w / h;
-  // glFrustum(-x, x, -1.0, 1.0, -1.0, 1.0);
-  // glMatrixMode(GL_MODELVIEW);
+  glViewport(0, 0, w, h);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  GLfloat x = (GLfloat)w / h;
+  glFrustum(-x, x, -10.0f, 10.0f, -100.0f, 100.0f);
+  glMatrixMode(GL_MODELVIEW);
 }
 
 void Widget::paintGL() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glLoadIdentity();
 
   QVector<QVector3D> vert = model_->getVertexes();
   QVector<unsigned> faces = model_->getFacets();
 
   if (faces.empty()) close();
+
+  glTranslatef(-0.25f, 0.25f, 0.0f);
 
   glLineWidth(6);
   glColor3f(0.0f, 0.0f, 1.0f);
@@ -54,6 +49,14 @@ void Widget::paintGL() {
   glDrawArrays(GL_POINTS, 0, vert.size());
 
   glDisableClientState(GL_VERTEX_ARRAY);
+
+  glColor3f(0.3164f, 0.3164f, 0.3164f);
+  glBegin(GL_LINES);
+  glVertex2f(-1.0f, 0.0f);
+  glVertex2f(1.0f, 0.0f);
+  glVertex2f(0.0f, -1.0f);
+  glVertex2f(0.0f, 1.0f);
+  glEnd();
 
   // for (int i = 0; i < faces.size(); i++) {
   //   unsigned first = faces.at(i).faceVertices[0] - 1;
