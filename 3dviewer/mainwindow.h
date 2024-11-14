@@ -14,15 +14,14 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow {
   Q_OBJECT
  public:
-  MainWindow();
-  explicit MainWindow(QWidget* parent = nullptr, s21::Widget* widget = nullptr);
+  explicit MainWindow(QWidget* parent = nullptr);
   ~MainWindow() = default;
 
   // void keyPressEvent(QKeyEvent* event) override;
   // void paintEvent(QPaintEvent* event) override;
+  void add3DWidget(s21::Widget* wid);
 
  private:
   Ui::MainWindow* ui;
-  int a;
 };
 #endif  // MAINWINDOW_H

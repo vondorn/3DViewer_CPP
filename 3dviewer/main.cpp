@@ -12,7 +12,8 @@ int main(int argc, char *argv[]) {
   model.loadModel(
       "/Users/granceti/Projects/cpp/3DViewer_CPP/3dviewer/objects/cube.obj");
   s21::Widget w(&model);
-  MainWindow m(&w);
+  MainWindow m;
+  m.;
   m.show();
   return a.exec();
 }

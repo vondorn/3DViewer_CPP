@@ -2,9 +2,9 @@
 
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget* parent, s21::Widget* widget)
+MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  ui->centralwidget = widget;
-  setLayout(layout());
 }
+
+void MainWindow::add3DWidget(s21::Widget* wid) { ui->wii = wid; }

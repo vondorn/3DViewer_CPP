@@ -23,7 +23,8 @@ class Widget : public QOpenGLWidget {
   Q_OBJECT
 
  public:
-  explicit Widget(Model* model = nullptr);
+  Widget();
+  Widget(Model* model = nullptr);
   ~Widget();
 
   void initializeGL() override;

@@ -35,7 +35,7 @@ void Widget::paintGL() {
 
   if (faces.empty()) close();
 
-  glTranslatef(-0.25f, 0.25f, 0.0f);
+  // glTranslatef(-0.25f, 0.25f, 0.0f);
 
   glLineWidth(6);
   glColor3f(0.0f, 0.0f, 1.0f);
