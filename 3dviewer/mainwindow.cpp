@@ -5,6 +5,8 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-}
 
-void MainWindow::add3DWidget(s21::Widget* wid) { ui->wii = wid; }
+  ui->wii = new s21::Widget(ui->centralwidget);
+  ui->wii->resize(1000, 1000);
+  ui->wii->setFocus();
+}

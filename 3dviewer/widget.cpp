@@ -4,7 +4,8 @@
 
 namespace s21 {
 
-Widget::Widget(Model* model) : model_(model) {}
+Widget::Widget(QWidget* parent, Controller* controller)
+    : QOpenGLWidget(parent), controller_(new Controller) {}
 
 Widget::~Widget() {}
 
@@ -30,8 +31,8 @@ void Widget::paintGL() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 
-  QVector<QVector3D> vert = model_->getVertexes();
-  QVector<unsigned> faces = model_->getFacets();
+  QVector<QVector3D> vert = controller_->getVertexes();
+  QVector<unsigned> faces = controller_->getFacets();
 
   if (faces.empty()) close();
 
@@ -80,65 +81,36 @@ void Widget::paintGL() {
 }
 
 void Widget::keyPressEvent(QKeyEvent* event) {
-  switch (event->key()) {
-    case Qt::Key_Space:
-      setCursor(QCursor(Qt::ClosedHandCursor));
-      isSpacePressed = 1;
-      break;
-    case Qt::Key_R:
-      model_->rotateY(5);
-      break;
-    case Qt::Key_T:
-      model_->rotateX(5);
-      break;
-    case Qt::Key_Y:
-      model_->rotateZ(5);
-      break;
-    default:
-      break;
+  if (event->key() == Qt::Key_Space) {
+    setCursor(QCursor(Qt::OpenHandCursor));
+    controller_->setSpacePressed(true);
   }
-  update();
 }
 
 void Widget::keyReleaseEvent(QKeyEvent* event) {
-  switch (event->key()) {
-    case Qt::Key_Space:
-      unsetCursor();
-      isSpacePressed = 0;
-      break;
-    default:
-      break;
+  if (event->key() == Qt::Key_Space) {
+    unsetCursor();
+    controller_->setSpacePressed(false);
   }
 }
 
 void Widget::mousePressEvent(QMouseEvent* event) {
-  isPressed = true;
-  lastPosition = event->pos();
+  controller_->setMousePressed(event->pos());
+  update();
 }
 
-void Widget::mouseReleaseEvent(QMouseEvent* event) { isPressed = false; }
+void Widget::mouseReleaseEvent(QMouseEvent* event) {
+  controller_->unsetMousePressed();
+  update();
+}
 
 void Widget::mouseMoveEvent(QMouseEvent* event) {
-  if (isSpacePressed && isPressed) {
-    QPoint position = event->pos();
-    model_->moveModelY((lastPosition.y() - position.y()) / 500.0f);
-    model_->moveModelX((position.x() - lastPosition.x()) / 500.0f);
-    update();
-    lastPosition = position;
-  } else if (isPressed) {
-    QPoint position = event->pos();
-    model_->rotateY((lastPosition.x() - position.x()) / 4.0f);
-    model_->rotateX((lastPosition.y() - position.y()) / 4.0f);
-    // model_->rotateZ((position.x() - lastPosition.x()) / 50);
-
-    update();
-    lastPosition = position;
-  }
+  controller_->moveMouse(event->pos());
+  update();
 }
 
 void Widget::wheelEvent(QWheelEvent* event) {
-  bool scaling = event->angleDelta().y() > 0 ? 1 : 0;
-  model_->scaleModel(scaling);
+  controller_->scaleMouse(event->angleDelta().y() > 0 ? 1 : 0);
   update();
 }
 

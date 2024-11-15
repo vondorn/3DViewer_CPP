@@ -30,7 +30,6 @@ void Model::loadModel(const QString& path) {
         for (short int i = 1; i < 4; i++) {
           QStringList vertex = list[i].split('/', Qt::SkipEmptyParts);
           facets.push_back(vertex[0].toUInt() - 1);
-          qDebug() << vertex[0].toUInt() - 1;
         }
       }
     }
@@ -85,28 +84,27 @@ void Model::loadModel(const QString& path) {
   file.close();
 }
 
-void Model::moveModelX(float distance) {
+void Model::moving(float x, float y, float z) {
   for (int i = 0; i < vertexes.size(); i++) {
-    vertexes[i].setX(vertexes[i].x() + distance);
+    vertexes[i].setX(vertexes[i].x() + x);
+    vertexes[i].setY(vertexes[i].y() + y);
+    vertexes[i].setZ(vertexes[i].z() + z);
   }
 }
 
-void Model::moveModelY(float distance) {
+void Model::scale(float x, float y, float z) {
   for (int i = 0; i < vertexes.size(); i++) {
-    vertexes[i].setY(vertexes[i].y() + distance);
+    vertexes[i].setX(vertexes[i].x() * x);
+    vertexes[i].setY(vertexes[i].y() * y);
+    vertexes[i].setZ(vertexes[i].z() * z);
   }
 }
 
-void Model::scaleModel(bool scaling) {
-  float m = scaling ? 1.1f : 0.9f;
-  for (int i = 0; i < vertexes.size(); i++) {
-    vertexes[i].setX(vertexes[i].x() * m);
-    vertexes[i].setY(vertexes[i].y() * m);
-    vertexes[i].setZ(vertexes[i].z() * m);
-  }
+void Model::rotate(float x, float y, float z) {
+  rotateX(x);
+  rotateY(y);
+  rotateZ(z);
 }
-
-void Model::rotateModel() {}
 
 void Model::rotateY(float angle) {
   angle *= M_PI / 180.0f;

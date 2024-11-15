@@ -9,22 +9,16 @@
 #include <QOpenGLTexture>
 #include <QtOpenGLWidgets/QOpenGLWidget>
 
-#include "model.h"
+#include "controller.h"
 
 namespace s21 {
-
-struct VertexData {
-  VertexData() {}
-
-  QVector3D vertexes;
-};
 
 class Widget : public QOpenGLWidget {
   Q_OBJECT
 
  public:
-  Widget();
-  Widget(Model* model = nullptr);
+  Widget(QWidget* parent = nullptr, Controller* controller = nullptr);
+
   ~Widget();
 
   void initializeGL() override;
@@ -41,14 +35,14 @@ class Widget : public QOpenGLWidget {
   void wheelEvent(QWheelEvent* event) override;
 
  private:
-  Model* model_;
-  QMatrix4x4 m_pr;
-  QMatrix4x4 m_view;
-  QOpenGLShaderProgram sp;
+  Controller* controller_;
+  // QMatrix4x4 m_pr;
+  // QMatrix4x4 m_view;
+  // QOpenGLShaderProgram sp;
 
-  bool isPressed = 0;  // Флаг, отслеживающий состояние нажатия
+  bool isPressed = 0;
   bool isSpacePressed = 0;
-  QPoint lastPosition;  // Последняя известная позиция нажатия
+  QPoint lastPosition;
 
   // void resizeEvent(QResizeEvent* event) override {
   //   resize(event->size().width(), event->size().width());

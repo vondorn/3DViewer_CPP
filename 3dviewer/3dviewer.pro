@@ -14,9 +14,9 @@ INCLUDEPATH += .
 #DEFINES += QT_DISABLE_DEPRECATED_UP_TO=0x060000 # disables all APIs deprecated in Qt 6.0.0 and earlier
 
 # Input
-HEADERS += widget.h model.h mainwindow.h
+HEADERS += widget.h model.h mainwindow.h controller.h
 FORMS += widget.ui mainwindow.ui
-SOURCES += main.cpp widget.cpp model.cpp mainwindow.cpp
+SOURCES += main.cpp widget.cpp model.cpp mainwindow.cpp controller.cpp
 TRANSLATIONS += 3dviewer_en_US.ts
 
 QT       += core gui

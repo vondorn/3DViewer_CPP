@@ -1,5 +1,5 @@
-PROJECT_FOLDER = ./3dviewer
-APP = ./3dviewer/3dviewer.app/Contents/MacOS/3dviewer
+PROJECT_FOLDER = 3dviewer
+APP = 3dviewer/3dviewer.app/Contents/MacOS/3dviewer
 
 all: rebuild
 
@@ -12,6 +12,7 @@ run:
 clean:
 	-$(MAKE) clean --directory=$(PROJECT_FOLDER)
 	-$(MAKE) distclean --directory=$(PROJECT_FOLDER)
+	rm -rf build-*
 
 rebuild: clean build run
 

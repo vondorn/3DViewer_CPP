@@ -19,9 +19,10 @@ class MainWindow : public QMainWindow {
 
   // void keyPressEvent(QKeyEvent* event) override;
   // void paintEvent(QPaintEvent* event) override;
-  void add3DWidget(s21::Widget* wid);
+  void add3DWidget();
 
  private:
   Ui::MainWindow* ui;
+  s21::Widget* wid;
 };
 #endif  // MAINWINDOW_H
