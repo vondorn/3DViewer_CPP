@@ -1,7 +1,6 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include <QKeyEvent>
 #include <QMatrix4x4>
 #include <QMouseEvent>
 #include <QOpenGLBuffer>
@@ -17,7 +16,7 @@ class Widget : public QOpenGLWidget {
   Q_OBJECT
 
  public:
-  Widget(QWidget* parent = nullptr, Controller* controller = nullptr);
+  Widget(QWidget* parent = nullptr);
 
   ~Widget();
 
@@ -34,13 +33,17 @@ class Widget : public QOpenGLWidget {
 
   void wheelEvent(QWheelEvent* event) override;
 
+  void moveSpin(float x, float y, float z);
+  void rotateSpin(float x, float y, float z);
+  void scaleSpin(float x, float y, float z);
+
  private:
   Controller* controller_;
   // QMatrix4x4 m_pr;
   // QMatrix4x4 m_view;
   // QOpenGLShaderProgram sp;
 
-  bool isPressed = 0;
+  bool isMousePressed = 0;
   bool isSpacePressed = 0;
   QPoint lastPosition;
 

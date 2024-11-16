@@ -85,14 +85,23 @@ void Model::loadModel(const QString& path) {
 }
 
 void Model::moving(float x, float y, float z) {
+  x -= modelData.mx;
+  y -= modelData.my;
+  z -= modelData.mz;
   for (int i = 0; i < vertexes.size(); i++) {
     vertexes[i].setX(vertexes[i].x() + x);
     vertexes[i].setY(vertexes[i].y() + y);
     vertexes[i].setZ(vertexes[i].z() + z);
   }
+  modelData.mx += x;
+  modelData.my += y;
+  modelData.mz += z;
 }
 
 void Model::scale(float x, float y, float z) {
+  modelData.sx *= x;
+  modelData.sy *= y;
+  modelData.sz *= z;
   for (int i = 0; i < vertexes.size(); i++) {
     vertexes[i].setX(vertexes[i].x() * x);
     vertexes[i].setY(vertexes[i].y() * y);
@@ -101,9 +110,18 @@ void Model::scale(float x, float y, float z) {
 }
 
 void Model::rotate(float x, float y, float z) {
+  x -= modelData.rx;
+  y -= modelData.ry;
+  z -= modelData.rz;
   rotateX(x);
   rotateY(y);
   rotateZ(z);
+  modelData.rx += x;
+  modelData.ry += y;
+  modelData.rz += z;
+  // if (modelData.rx > 360.0f) modelData.rx -= 360;
+  // if (modelData.ry > 360.0f) modelData.ry -= 360;
+  // if (modelData.rz > 360.0f) modelData.rz -= 360;
 }
 
 void Model::rotateY(float angle) {

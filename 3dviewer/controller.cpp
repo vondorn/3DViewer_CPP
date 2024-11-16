@@ -40,4 +40,10 @@ void Controller::setSpacePressed(bool press) { isSpacePressed = press; }
 
 bool Controller::getSpacePressed() { return isSpacePressed; }
 
+void Controller::move(float x, float y, float z) { model_->moving(x, y, z); }
+
+void Controller::rotate(float x, float y, float z) { model_->rotate(x, y, z); }
+
+void Controller::scale(float x, float y, float z) { model_->scale(x, y, z); }
+
 }  // namespace s21

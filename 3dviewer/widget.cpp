@@ -4,7 +4,7 @@
 
 namespace s21 {
 
-Widget::Widget(QWidget* parent, Controller* controller)
+Widget::Widget(QWidget* parent)
     : QOpenGLWidget(parent), controller_(new Controller) {}
 
 Widget::~Widget() {}
@@ -83,34 +83,66 @@ void Widget::paintGL() {
 void Widget::keyPressEvent(QKeyEvent* event) {
   if (event->key() == Qt::Key_Space) {
     setCursor(QCursor(Qt::OpenHandCursor));
-    controller_->setSpacePressed(true);
+    isSpacePressed = true;
   }
 }
 
 void Widget::keyReleaseEvent(QKeyEvent* event) {
   if (event->key() == Qt::Key_Space) {
     unsetCursor();
-    controller_->setSpacePressed(false);
+    isSpacePressed = false;
   }
 }
 
 void Widget::mousePressEvent(QMouseEvent* event) {
-  controller_->setMousePressed(event->pos());
-  update();
+  isMousePressed = true;
+  lastPosition = event->pos();
 }
 
-void Widget::mouseReleaseEvent(QMouseEvent* event) {
-  controller_->unsetMousePressed();
-  update();
-}
+void Widget::mouseReleaseEvent(QMouseEvent* event) { isMousePressed = false; }
 
 void Widget::mouseMoveEvent(QMouseEvent* event) {
-  controller_->moveMouse(event->pos());
+  if (isSpacePressed && isMousePressed) {
+    float x = (event->pos().x() - lastPosition.x()) / 500.0f;
+    float y = (lastPosition.y() - event->pos().y()) / 500.0f;
+    float z = 0.0f;
+
+    // mainwindow_->setMoveX(x);
+    // mainwindow_->setMoveY(y);
+    // mainwindow_->setMoveZ(z);
+
+    // controller_->move(x, y, z);
+
+    lastPosition = event->pos();
+  } else if (isMousePressed) {
+    float x = (lastPosition.y() - event->pos().y()) / 4.0f;
+    float y = (lastPosition.x() - event->pos().x()) / 4.0f;
+    float z = 0.0f;
+
+    // model_->rotate(x, y, z);
+
+    lastPosition = event->pos();
+  }
   update();
 }
 
 void Widget::wheelEvent(QWheelEvent* event) {
   controller_->scaleMouse(event->angleDelta().y() > 0 ? 1 : 0);
+  update();
+}
+
+void Widget::moveSpin(float x, float y, float z) {
+  controller_->move(x, y, z);
+  update();
+}
+
+void Widget::rotateSpin(float x, float y, float z) {
+  controller_->rotate(x, y, z);
+  update();
+}
+
+void Widget::scaleSpin(float x, float y, float z) {
+  controller_->scale(x, y, z);
   update();
 }
 

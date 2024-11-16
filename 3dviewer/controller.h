@@ -20,6 +20,10 @@ class Controller {
   QVector<QVector3D>& getVertexes() { return model_->getVertexes(); }
   QVector<unsigned>& getFacets() { return model_->getFacets(); }
 
+  void move(float x, float y, float z);
+  void rotate(float x, float y, float z);
+  void scale(float x, float y, float z);
+
  private:
   Model* model_;
   bool isMousePressed = 0;

@@ -33,11 +33,14 @@ class Model {
   void rotateY(float angle);
   void rotateZ(float angle);
 
+  struct ModelData {
+    float mx, my, mz, rx, ry, rz, sx = 1.0f, sy = 1.0f, sz = 1.0f;
+  };
+
  private:
   QVector<QVector3D> vertexes;
   QVector<unsigned> facets;
-
-
+  ModelData modelData;
 };
 }  // namespace s21
 #endif  // MODEL_H
